@@ -2,6 +2,9 @@ let playing = false;
 let score;
 let counter;
 let question;
+let correctAnswer;
+let action;
+let lives;
 
 //if we click on the start/reset
 document.getElementById('startReset').onclick =
@@ -27,13 +30,48 @@ document.getElementById('startReset').onclick =
         document.getElementById('startReset').innerHTML = '<p>Reset</p>';
         countdownTimer();
         
+        //show the hearts
+        document.getElementById("life").style.display = 'block';
+        lives = 3;
+        addHearts();
+        
         //generate new Q&A
         generateQandA();
     }
 }
-   
 
-    
+for(let i = 1; i < 5; i++) {
+        document.getElementById("box"+i).onclick = function(){
+        if (playing == true) {
+            if(this.innerHTML == correctAnswer) {
+                score++;
+
+                document.getElementById("scorevalue").innerHTML = score;
+
+                document.getElementById("correct").style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById("correct").style.display = 'none';
+                }, 1000);
+
+                generateQandA();
+            }else {
+                document.getElementById("wrong").style.display = 'block';
+                setTimeout(() => {
+                        document.getElementById("wrong").style.display = 'none';
+                    }, 1000);
+                if (lives > 1) {
+                    lives--;
+                } else {
+                    stopTimer();
+                    document.getElementById('timer').style.display = "none";
+                    document.getElementById("gameover").innerHTML = "GAME OVER <br />Your total score is " + score;
+                    document.getElementById("gameover").style.display = "block";
+                }
+            }
+        }
+    }
+}
+
 
 //if we click on answer box
     //if we are playing
@@ -55,34 +93,43 @@ let countdownTimer = () => {
         if(count == 0) {
             stopTimer();
             document.getElementById('timer').style.display = "none";
+            document.getElementById("gameover").innerHTML = "GAME OVER <br />Your total score is " + score;
             document.getElementById("gameover").style.display = "block";
         }
 }, 1000)};
-
+// stop the timer
 stopTimer = () => {
     clearInterval(action);
 }
 
+
 //generate the question and answer
-let x;
-let y;
-let correctAnswer;
-let generateQandA = () => {
-    x = 1 + Math.floor(Math.random() * 9);
-    y = 1 + Math.floor(Math.random() * 9);
+generateQandA = () => {
+    let x = 1 + Math.round(Math.random() * 9);
+    let y = 1 + Math.round(Math.random() * 9);
     correctAnswer = x * y;
-    document.getElementById("question").innerHTML = "<p>" + x  + " x " + y + "</p>";
-    randomBox();
+    document.getElementById("question").innerHTML = x  + " x " + y ;
     
+    correctBox = 1 + Math.round(Math.random() * 3);
+    document.getElementById("box" + correctBox).innerHTML =  correctAnswer;
+    
+    
+    //generate other boxes with wrong answer
+    let answers = [correctAnswer]
+    for(let i = 1; i < 5; i++) {
+        if(i !== correctBox) {
+            let wrong;
+            do{
+              wrong = (1 + Math.floor(Math.random() * 9))*(1 + Math.floor(Math.random() * 9)) //wrong answer
+            }while(answers.indexOf(wrong) > -1);
+            document.getElementById("box"+i).innerHTML = wrong;
+            answers.push(wrong);
+        }
+    }
 }
 
-//generate random box
-randomBox = () => {
-    box = 1 + Math.floor(Math.random() * 4);
-    document.getElementById("box" + box).innerHTML = "<p>" + correctAnswer + "</p>";
+addHearts = () => {
+    for(let i = 0; i < lives; i++) { 
+        $("#life").append('<img src="images/hearts.png">')
+    }
 }
-
-
-
-
-
