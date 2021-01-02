@@ -12,7 +12,7 @@ body {
     margin: 100px auto;
 }
 
-.questionBox {
+#questionBox {
     position: absolute;
     height: 150px;
     width: 420px;
@@ -43,14 +43,13 @@ body {
     text-align: center;
 }
 
-.boxes {
+#boxes {
     position: absolute;
     height: 100px;
     width: 420px;
     margin-top: 290px;
     margin-left: 83px;
 }
-
 
 .box {
     float: left;

@@ -1,6 +1,7 @@
 let playing = false;
 let score;
 let counter;
+let question;
 
 //if we click on the start/reset
 document.getElementById('startReset').onclick =
@@ -8,13 +9,13 @@ document.getElementById('startReset').onclick =
     function() {
     if (playing == true) {
         location.reload(); //reload the page
-        document.getElementById('startReset').innerHTML = '<p>Start</p>';
-    }else {
-        //if we are not playing
+        
+    }else {//if we are not playing
         playing = true;
-        document.getElementById('startReset').innerHTML = '<p>Reset</p>';
-        score = 0;
+        
         //set score to 0
+        score = 0;
+        document.getElementById("scorevalue").innerHTML = score;
         
         document.getElementById('timer').style.display = "block";
         //show countdown box
@@ -23,12 +24,11 @@ document.getElementById('startReset').onclick =
                 //yes -> continue
                 //no gameover
         //change button text to reset
+        document.getElementById('startReset').innerHTML = '<p>Reset</p>';
         countdownTimer();
         
-        
-        
         //generate new Q&A
-        
+        generateQandA();
     }
 }
    
@@ -48,16 +48,41 @@ document.getElementById('startReset').onclick =
 //functions
 counter = document.getElementById("counter");
 let count = 60;
-let countdownTimer = setInterval(function(){
-    count--;
-    counter.innerHTML = count;
-    if(count == 0) {
-        stopTimer();
-        document.getElementById('timer').style.display = "none";
-        document.getElementById("gameover").style.display = "block";
-    }
-}, 1000);
+let countdownTimer = () => {
+    action = setInterval(() => {
+        count--;
+        counter.innerHTML = count;
+        if(count == 0) {
+            stopTimer();
+            document.getElementById('timer').style.display = "none";
+            document.getElementById("gameover").style.display = "block";
+        }
+}, 1000)};
 
-stopTimer = function() {
-    clearInterval(countdownTimer);
+stopTimer = () => {
+    clearInterval(action);
 }
+
+//generate the question and answer
+let x;
+let y;
+let correctAnswer;
+let generateQandA = () => {
+    x = 1 + Math.floor(Math.random() * 9);
+    y = 1 + Math.floor(Math.random() * 9);
+    correctAnswer = x * y;
+    document.getElementById("question").innerHTML = "<p>" + x  + " x " + y + "</p>";
+    randomBox();
+    
+}
+
+//generate random box
+randomBox = () => {
+    box = 1 + Math.floor(Math.random() * 4);
+    document.getElementById("box" + box).innerHTML = "<p>" + correctAnswer + "</p>";
+}
+
+
+
+
+
